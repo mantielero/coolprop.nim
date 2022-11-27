@@ -26,6 +26,7 @@ proc fill*(this: var SimpleState; v: cdouble) {.importcpp: "fill",
     header: "DataStructures.h".}
 proc is_valid*(this: var SimpleState): bool {.importcpp: "is_valid",
     header: "DataStructures.h".}
+
 type
   CriticalState* {.importcpp: "CoolProp::CriticalState",
                   header: "DataStructures.h", bycopy.} = object of SimpleState
@@ -308,31 +309,33 @@ proc match_pair*(key1: parameters; key2: parameters; x1: parameters; x2: paramet
                 swap: var bool): bool =
   discard
 
-## *
-##  @brief Generate an update pair from key, value pairs
-##
-##  If the input pair is valid, v1 and v2 will correspond to the returned output pair
-##
-##  @param key1 The first input key
-##  @param value1 The first input value
-##  @param key2 The second input key
-##  @param value2 The second input value
-##  @param out1 The first output value
-##  @param out2 The second output value
-##  @return pair, or INPUT_PAIR_INVALID if not valid
-##
 
-proc generate_update_pair*[T](key1: parameters; value1: T; key2: parameters; value2: T;
-                             out1: var T; out2: var T): input_pairs {.
+proc generate_update_pair*[T](key1: parameters; value1: T; 
+                              key2: parameters; value2: T;
+                              out1: var T; out2: var T): input_pairs {.
     importcpp: "CoolProp::generate_update_pair(@)",
     header: "DataStructures.h".}
-                             #=
-  #discard
+    ## *
+    ##  @brief Generate an update pair from key, value pairs
+    ##
+    ##  If the input pair is valid, v1 and v2 will correspond to the returned output pair
+    ##
+    ##  @param key1 The first input key
+    ##  @param value1 The first input value
+    ##  @param key2 The second input key
+    ##  @param value2 The second input value
+    ##  @param out1 The first output value
+    ##  @param out2 The second output value
+    ##  @return pair, or INPUT_PAIR_INVALID if not valid
+    ##
+
 
 ## / Get the input pair index associated with its string representation
 
 proc get_input_pair_index*(input_pair_name: string): input_pairs {.
     importcpp: "CoolProp::get_input_pair_index(@)", header: "DataStructures.h".}
+
+
 ## / Return the short description of an input pair key ("DmolarT_INPUTS" for instance)
 
 proc get_input_pair_short_desc*(pair: input_pairs): var string {.

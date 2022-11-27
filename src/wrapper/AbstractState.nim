@@ -169,7 +169,7 @@ proc set_reference_stateD*(this: var AbstractState; T: cdouble; rhomolar: cdoubl
 #                                  mole_fractions: CppVector[cdouble]) {.
 #       importcpp: "set_mole_fractions_double".}
 
-proc mole_fractions_liquid*(this: var AbstractState): CppVector[CoolPropDbl] {.
+proc mole_fractions_liquid_original*(this: var AbstractState): CppVector[CoolPropDbl] {.
     importcpp: "mole_fractions_liquid".}
 
   ## / Get the mole fractions of the equilibrium liquid phase (but as a double for use in SWIG wrapper)
@@ -177,7 +177,7 @@ proc mole_fractions_liquid_double*(this: var AbstractState): CppVector[cdouble] 
     importcpp: "mole_fractions_liquid_double".}
 
   ## / Get the mole fractions of the equilibrium vapor phase
-proc mole_fractions_vapor*(this: var AbstractState): CppVector[CoolPropDbl] {.
+proc mole_fractions_vapor_original*(this: var AbstractState): CppVector[CoolPropDbl] {.
     importcpp: "mole_fractions_vapor".}
 
   ## / Get the mole fractions of the equilibrium vapor phase (but as a double for use in SWIG wrapper)

@@ -1,39 +1,28 @@
-{.passL:"-lCoolProp -ldl".}
-{.passC:"-Wall -O2 -DCOOLPROP_LIB  -I/usr/include/fmt -I/usr/include/CoolProp".} # -std=c++11 
-import cppstl
-import wrapper/CoolPropLib
-#import DataStructures
-import AbstractState
-import std/strformat
+# nim cpp -r test02
+import coolprop
+import std/unittest
 
-proc newCppSharedPtr[T](p: ptr T): CppSharedPtr[T] {.constructor, importcpp: "std::shared_ptr<'*0>(#)", header:"<memory>".}
-type
-  AbstractStatePtr* = CppSharedPtr[AbstractState.AbstractState]
+const
+  eps = 1.0e-2 ## Epsilon used for float comparisons.
 
-proc factory*(backend, fluidNames:string):AbstractStatePtr  =
-  newCppSharedPtr( factory(initCppString(backend), initCppString(fluidNames)) )
+proc `=~` *(x, y: float): bool =
+  result = abs(x - y) < eps
 
-proc update*[N,M:SomeNumber](this: AbstractStatePtr; input_pair: input_pairs; Value1: N;
-            Value2: M) =
-  ## update the state using two state variables
-  this.deref.update(input_pair, Value1.cdouble, Value2.cdouble)
+suite "description for this stuff":
+  #echo "suite setup: run once before the tests"
+  var water = factory("HEOS", "Water")
+  water.update(PQ_INPUTS, 101325, 0) # SI units
 
-proc temp*(this: AbstractStatePtr): float =
-  ## return the temperature in K
-  return this.deref.T.float
+  test "checking values":
+    # give up and stop if this fails
+    assert water.t =~ 373.124
+    assert water.rhomass =~ 958.367
+    assert water.rhomolar =~ 53197.515
+    assert water.hmass =~ 419057.733
+    assert water.hmolar =~ 7549.437    
+    assert water.smass =~ 1306.921
+    assert water.smolar =~ 23.545      
 
-
-#---------------------
-
-var water = factory("HEOS", "Water")
-water.update(PQ_INPUTS, 101325, 0) # SI units
-echo &"T: {water.temp:.3f} K"
-echo &"rho: {water.rhomass:.3f} kg/m^3"
-echo &"rho: {water.rhomolar:.3f} mol/m^3"
-echo &"h: {water.hmass:.3f} J/kg"
-echo &"h: {water.hmolar:.3f} J/mol"
-echo &"s: {water.smass:.3f} J/kg/K"
-echo &"s: {water.smolar:.3f} J/mol/K"
 
 #---------------
 #[
@@ -288,7 +277,8 @@ int main(){
     std::cout << format("value(all): %0.13g, %g us/call\n", summer, ((double)(t2-t1))/CLOCKS_PER_SEC/double(len)*1e6);
     return EXIT_SUCCESS;
 }
-]
+]#
+
 #[
 value(all): 8339004.432514, 0.8 us/call
 ]#

@@ -54,8 +54,6 @@ echo HEOS.saturated_liquid_keyed_output(iDmolar)
 
 # Vapor phase molar density
 echo HEOS.saturated_vapor_keyed_output(iDmolar)
-#Out[19]: 69.503104630333
-
 
 # Liquid phase mole fractions
 echo HEOS.moleFractionsLiquid()
@@ -63,14 +61,13 @@ echo HEOS.moleFractionsLiquid()
 # Vapor phase mole fractions -
 # Should be the bulk composition back since we are doing a dewpoint calculation
 echo HEOS.moleFractionsVapor()
-#Out[21]: [0.19999999999999996, 0.7999999999999999]
-#[
-echo HEOS.p  # 0.002494311404279685
-for k in @[iP, iHmass, iHmolar]:
-  echo HEOS.keyed_output(k)
-]#
-#[
-0.002494311404279685
-2551431.068564012
-45964.71448370705
-]#
+
+
+# Imposing the single-phase gas region
+HEOS.specify_phase(iphase_gas)
+
+# Reset the specification of phase
+HEOS.specify_phase(iphase_not_imposed)
+
+# Or, more simply
+HEOS.unspecify_phase()

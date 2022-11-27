@@ -1,6 +1,7 @@
 {.passL:"-lCoolProp -ldl".}
 {.passC:"-std=c++11 -Wall -O2 -DCOOLPROP_LIB  -I/usr/include/fmt -I/usr/include/CoolProp".}
 # http://www.coolprop.org/coolprop/wrappers/SharedLibrary/index.html
+#import cppstl
 
 {.push header: "CoolPropLib.h".}
 
@@ -263,7 +264,7 @@ proc haprops*(Output: cstring; Name1: cstring; Prop1: ptr cdouble; Name2: cstrin
 ##  ---------------------------------
 ##         Low-level access
 ##  ---------------------------------
-## *
+## 
 ##  @brief Generate an AbstractState instance, return an integer handle to the state class generated to be used in the other low-level accessor functions
 ##  @param backend The backend you will use, "HEOS", "REFPROP", etc.
 ##  @param fluids '&' delimited list of fluids
@@ -276,6 +277,8 @@ proc haprops*(Output: cstring; Name1: cstring; Prop1: ptr cdouble; Name2: cstrin
 proc AbstractState_factory*(backend: cstring; fluids: cstring; errcode: ptr clong;
                            message_buffer: cstring; buffer_length: clong): clong {.
     importcpp: "AbstractState_factory(@)".}
+
+
 ## *
 ##  @brief Get the fluid names for the AbstractState
 ##  @param handle The integer handle for the state class stored in memory

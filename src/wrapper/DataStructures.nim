@@ -332,7 +332,7 @@ proc generate_update_pair*[T](key1: parameters; value1: T;
 
 ## / Get the input pair index associated with its string representation
 
-proc get_input_pair_index*(input_pair_name: string): input_pairs {.
+proc get_input_pair_index_original2*(input_pair_name: string): input_pairs {.
     importcpp: "CoolProp::get_input_pair_index(@)", header: "DataStructures.h".}
 
 

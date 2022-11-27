@@ -8,20 +8,21 @@ const
 proc `=~` *(x, y: float): bool =
   result = abs(x - y) < eps
 
-suite "description for this stuff":
+suite "Testing the low level interface":
   #echo "suite setup: run once before the tests"
-  var water = factory("HEOS", "Water")
-  water.update(PQ_INPUTS, 101325, 0) # SI units
+  setup:
+    var water = factory("HEOS", "Water")
+    water.update(PQ_INPUTS, 101325, 0) # SI units
 
   test "checking values":
     # give up and stop if this fails
-    assert water.t =~ 373.124
-    assert water.rhomass =~ 958.367
+    assert water.t        =~ 373.124
+    assert water.rhomass  =~ 958.367
     assert water.rhomolar =~ 53197.515
-    assert water.hmass =~ 419057.733
-    assert water.hmolar =~ 7549.437    
-    assert water.smass =~ 1306.921
-    assert water.smolar =~ 23.545      
+    assert water.hmass    =~ 419057.733
+    assert water.hmolar   =~ 7549.437    
+    assert water.smass    =~ 1306.921
+    assert water.smolar   =~ 23.545      
 
 
 #---------------

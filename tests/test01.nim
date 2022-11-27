@@ -1,11 +1,27 @@
 import coolprop
 import std/unittest
 
-var T = 298.0
-var p = 1.0e5
-echo PropsSI( "Dmolar", "T", 298.0, "P", 1.0e5, "Propane[0.5]&Ethane[0.5]") # Default backend is HEOS
-echo PropsSI( "Dmolar", "T", 298.0, "P", 1.0e5, "HEOS::Propane[0.5]&Ethane[0.5]")
-echo PropsSI( "Dmolar", "T", 298.0, "P", 1.0e5, "REFPROP::Propane[0.5]&Ethane[0.5]")
+const
+  eps = 1.0e-2 ## Epsilon used for float comparisons.
+
+proc `=~` *(x, y: float): bool =
+  result = abs(x - y) < eps
+
+
+suite "Testing the high level interface":
+  #echo "suite setup: run once before the tests"
+  setup:
+    var T = 298.0
+    var p = 1.0e5
+
+  test "checking HEOS backend":
+    # Default backend is HEOS
+    assert PropsSI( "Dmolar", "T", 298.0, "P", 1.0e5, "Propane[0.5]&Ethane[0.5]")       =~ 40.827
+    assert PropsSI( "Dmolar", "T", 298.0, "P", 1.0e5, "HEOS::Propane[0.5]&Ethane[0.5]") =~ 40.827
+
+  #test "checking REFPROP backend":  
+  #  echo PropsSI( "Dmolar", "T", 298.0, "P", 1.0e5, "REFPROP::Propane[0.5]&Ethane[0.5]")
+
 
 #[
 
@@ -36,6 +52,9 @@ outputs.pushBack("Dmolar")
 #     vector[cdouble]] {.importcpp: "CoolProp::PropsSImulti(@)", header: "CoolProp.h".}    
 ]#
 #2.0, 0.5)
+
+
+
 #[
     // Vector example
     std::vector<double> z(2,0.5);
